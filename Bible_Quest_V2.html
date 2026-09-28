@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bible Quest — Version 2</title>
+<style>
+:root{--navy:#102a43;--blue:#243b53;--gold:#d4a72c;--cream:#fffaf0;--paper:#fff;--ink:#182b3a;--muted:#627d98;--green:#2f855a;--red:#b83232;--purple:#6b46c1}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#102a43,#486581);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
+#app{max-width:1100px;margin:auto;min-height:100vh;background:var(--cream);box-shadow:0 0 45px #0006}
+header{background:linear-gradient(135deg,#0b2033,#243b53);color:#fff;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;gap:15px;position:sticky;top:0;z-index:4}
+.logo{font-size:24px;font-weight:900}.sub{font-size:12px;color:#bcccdc}.stats{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.pill{padding:7px 10px;border-radius:20px;background:#ffffff16;border:1px solid #ffffff30;font-weight:800;font-size:13px}
+main{padding:25px}.screen{display:none}.screen.active{display:block}.hero{text-align:center;padding:20px 5px 28px}.hero h1{font-size:42px;margin:5px 0;color:var(--blue)}.hero p{max-width:750px;margin:10px auto 22px;color:var(--muted);font-size:17px;line-height:1.55}
+button{border:0;border-radius:12px;padding:12px 17px;background:var(--blue);color:#fff;font-weight:850;font-size:14px;cursor:pointer;transition:.15s}button:hover{transform:translateY(-1px);filter:brightness(1.07)}button.secondary{background:#e6edf3;color:var(--ink)}button.gold{background:var(--gold);color:#241b05}button.purple{background:var(--purple)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:15px}.card{background:#fff;border:1px solid #eadfca;border-radius:18px;padding:18px;box-shadow:0 4px 14px #0000000b}.world{cursor:pointer}.world.locked{opacity:.45;cursor:not-allowed}.world .icon{font-size:38px}.world h3{margin:7px 0 4px}.world p{color:var(--muted);font-size:13px;min-height:38px}.tag{display:inline-block;border-radius:999px;padding:5px 9px;background:#f7e7b5;border:1px solid #e0bd5c;font-size:11px;font-weight:850;margin:2px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}.top h2{margin:0}.meter{height:10px;background:#e2e8f0;border-radius:20px;overflow:hidden;flex:1}.meter>div{height:100%;background:var(--gold);transition:.3s}.bar{display:flex;align-items:center;gap:10px;margin:12px 0 18px}.q{font-size:25px;line-height:1.3;margin:15px 0}.answers{display:grid;gap:10px}.ans{text-align:left;background:#fff;color:var(--ink);border:2px solid #d9e2ec}.ans.correct{background:#eaf7ef;border-color:var(--green)}.ans.wrong{background:#fff0f0;border-color:var(--red)}.feedback{display:none;margin-top:15px;padding:15px;border-radius:13px;background:#eef2f7;line-height:1.5}.feedback.show{display:block}.lens{margin-top:16px;border-left:4px solid var(--gold);background:#fffdf5;padding:15px;border-radius:0 12px 12px 0}.lens b{color:var(--blue)}.case{border-left:4px solid var(--purple);background:#faf7ff;padding:15px;border-radius:0 12px 12px 0}.case h3{margin-top:0}.choicegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choicegrid button{min-height:75px}.quote{font-family:Georgia,serif;font-size:20px;line-height:1.55;border-left:4px solid var(--gold);padding:17px;background:#fffdf5}.small{font-size:12px;color:var(--muted)}.center{text-align:center}.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#edf2f7;margin:3px;font-size:12px;font-weight:800}.artifact{font-size:40px}.bigscore{font-size:50px;font-weight:950;color:var(--gold)}footer{text-align:center;color:#718096;font-size:11px;padding:18px}
+@media(max-width:650px){main{padding:16px}.hero h1{font-size:32px}.q{font-size:21px}.choicegrid{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}.stats{justify-content:flex-start}}
+</style>
+</head>
+<body>
+<div id="app">
+<header>
+ <div><div class="logo">📜 BIBLE QUEST II</div><div class="sub">The Story of Salvation • A Catholic Scripture Adventure</div></div>
+ <div class="stats"><span class="pill">⭐ <span id="xp">0</span> XP</span><span class="pill">🔥 <span id="streak">0</span></span><span class="pill">🏅 <span id="rank">Seeker</span></span></div>
+</header>
+<main>
+<section id="home" class="screen active">
+ <div class="hero">
+  <div style="font-size:64px">🌎 📜 🐏 👑 ✝️</div>
+  <h1>BIBLE QUEST II</h1>
+  <p><b>Don't just memorize the Bible. Enter its story.</b><br>
+  Travel through salvation history, solve real-life dilemmas, discover Catholic connections, and learn to read Scripture with the question: <i>What does this reveal about God, humanity, and Christ?</i></p>
+  <button onclick="go('worlds')">BEGIN THE QUEST ⚔️</button>
+ </div>
+ <div class="grid">
+  <div class="card"><b>📖 Scripture First</b><p>Every mission points you to an actual biblical passage to read in your Bible.</p></div>
+  <div class="card"><b>🧠 Catholic Lens</b><p>Explore covenant, typology, sacrament, liturgy, priesthood, kingship, and the four senses of Scripture.</p></div>
+  <div class="card"><b>📱 Real Life</b><p>Friend drama, social media, pressure, popularity, forgiveness, ambition, and identity become case studies.</p></div>
+  <div class="card"><b>🔥 Word on Fire</b><p>Short original commentary inspired by themes Bishop Barron develops in his Scripture teaching.</p></div>
+ </div>
+</section>
+
+<section id="worlds" class="screen">
+ <div class="top"><div><h2>Choose Your World</h2><div class="small">Complete a world to unlock the next.</div></div><button class="secondary" onclick="go('home')">Home</button></div>
+ <div id="worldGrid" class="grid"></div>
+</section>
+
+<section id="mission" class="screen">
+ <div class="top"><button class="secondary" onclick="go('worlds')">← Worlds</button><span class="tag" id="missionTag"></span></div>
+ <div class="bar"><span id="qnum"></span><div class="meter"><div id="meter"></div></div><span id="worldScore"></span></div>
+ <div id="missionCard" class="card"></div>
+</section>
+
+<section id="result" class="screen center">
+ <div class="hero"><div class="bigscore" id="resultScore"></div><h1 id="resultTitle"></h1><p id="resultText"></p>
+ <div class="card" style="max-width:650px;margin:auto"><div id="badges"></div><p class="small">Your progress is saved on this device.</p></div><br>
+ <button onclick="go('worlds')">CONTINUE JOURNEY →</button></div>
+</section>
+
+<section id="codex" class="screen">
+ <div class="top"><h2>📚 Scripture Codex</h2><button class="secondary" onclick="go('worlds')">Back</button></div>
+ <div class="grid">
+  <div class="card"><b>Literal Sense</b><p>What does the passage actually say in its historical and literary context?</p></div>
+  <div class="card"><b>Allegorical Sense</b><p>How can events and persons point toward Christ and the New Covenant?</p></div>
+  <div class="card"><b>Moral Sense</b><p>How should this change the way I live?</p></div>
+  <div class="card"><b>Anagogical Sense</b><p>How does this point toward our final destiny with God?</p></div>
+ </div>
+</section>
+</main>
+<footer>Classroom prototype • Scripture references are included for students to read in context • Catholic commentary is paraphrased, not reproduced.</footer>
+</div>
+
+<script>
+const W=[
+{name:"World I — In the Beginning",icon:"🌎",desc:"Creation, Fall, Noah, Babel, Abraham",tags:["Genesis","Creation","Covenant"],missions:[
+ {type:"quiz",cat:"GENESIS",q:"A student says: “Genesis 1 is obviously trying to be a modern science textbook. If science describes cosmic history differently, Christianity collapses.” What is the most Catholic response?",a:["Science is wrong whenever it conflicts with the Bible.","Genesis must be read according to its literary genre and theological purpose; it teaches truths about God, creation, humanity, and our dependence on him.","Genesis is just a myth with no truth in it.","Catholics are not allowed to study evolution."],c:1,ref:"Genesis 1–2; CCC 283–289",lens:"Catholic biblical interpretation pays attention to genre. The text can teach profound truths about God and creation without functioning as a modern laboratory report. This is a theme Bishop Barron has emphasized in his teaching on Genesis."},
+ {type:"case",cat:"CASE STUDY • THE FEED",q:"Your friend posts a photo that makes everyone laugh at another student. You can get 40 likes by reposting it. Nobody will know you started the pile-on. What does Genesis 1–3 challenge you to remember?",a:["My worth comes from being more popular than others.","Human beings bear God's image, so another person's dignity isn't a game for my status.","If everyone laughs, it must be morally okay.","Sin only matters when an adult catches me."],c:1,ref:"Genesis 1:26–27; Genesis 3",lens:"The Catholic tradition connects human dignity to being created in God's image. Sin often begins with a distorted desire: grasping for something that looks good while forgetting the good God has already given."},
+ {type:"quiz",cat:"COVENANT",q:"Why is Abraham so important to the biblical story?",a:["He discovers a secret political strategy.","God calls him to trust, makes a covenant with him, and promises that blessing will extend through his family to the nations.","He writes the entire Old Testament.","He becomes the first king of Israel."],c:1,ref:"Genesis 12:1–3; 15; 17",lens:"A major theme in Bishop Barron's teaching is Abraham's faith as trusting response to God's call. Abraham is not the finish line; his story begins a long divine rescue mission."},
+ {type:"case",cat:"CASE STUDY • CONTROL",q:"You have planned your entire senior year. Then your family tells you that a major plan has changed. You are angry because you cannot control the outcome. Which response most resembles Abraham's call?",a:["I refuse to move until I can guarantee the result.","I pretend not to care.","I can take the next faithful step even when I cannot see the whole road.","I blame God for changing my plan."],c:2,ref:"Genesis 12:1–4",lens:"Faith is not having every answer before moving. Abraham's vocation begins with a call and a promise. The Christian life similarly asks for trust before total visibility."},
+ {type:"quiz",cat:"TYPOLOGY",q:"A Catholic reading of the Bible often asks how Old Testament events prepare us for Christ. This is called…",a:["Typology / allegorical reading","Astrology","Chronological inversion","Biblical replacement"],c:0,ref:"Luke 24:27; CCC 109–119",lens:"The Old Testament remains real history and revelation while also pointing forward. Christian reading sees patterns—creation/new creation, Adam/Christ, Passover/Christ's sacrifice, Davidic kingship/Christ."}
+]},
+{name:"World II — Freedom",icon:"🌊",desc:"Moses, Passover, Exodus, Sinai",tags:["Moses","Passover","Ten Commandments"],missions:[
+ {type:"quiz",cat:"EXODUS",q:"What is the deeper point of the Exodus besides escaping slavery?",a:["Israel becomes wealthy overnight.","God forms a liberated people who must learn trust, covenant faithfulness, moral life, and worship.","Moses becomes Pharaoh.","Israel stops needing God."],c:1,ref:"Exodus 1–20",lens:"Bishop Barron describes Exodus as a process of formation: God teaches trust through liberation, gives moral law, and forms Israel in holy worship. Freedom is not merely freedom from; it is freedom for communion with God."},
+ {type:"case",cat:"CASE STUDY • FREEDOM",q:"Your parents set a rule: no phone after midnight. You say, “Real freedom means nobody gets to tell me what to do.” Exodus and Catholic moral theology would challenge that idea because…",a:["Freedom is doing whatever impulse feels strongest.","Freedom becomes meaningful when it is ordered toward the good.","Rules are always bad.","God wants humans to have no responsibilities."],c:1,ref:"Exodus 20; CCC 1731–1733",lens:"Biblical freedom is ordered freedom. Israel is liberated from Pharaoh in order to belong to God and become a holy people. Christian freedom is not mere self-invention; it is the capacity to choose the good."},
+ {type:"quiz",cat:"PASSOVER",q:"The Passover lamb becomes enormously important for Christian interpretation because…",a:["Jesus is presented in the New Testament as the Lamb whose sacrifice brings definitive deliverance.","Lambs were always forbidden in Israel.","The Exodus is unrelated to the New Testament.","It predicts the invention of farming."],c:0,ref:"Exodus 12; John 1:29; 1 Corinthians 5:7",lens:"The Passover pattern is central to Catholic sacramental imagination. Liberation through sacrifice becomes a key background for understanding Christ's Passion and the Eucharist."},
+ {type:"case",cat:"CASE STUDY • GROUP CHAT",q:"A group chat turns against one student. You know the accusations are exaggerated, but staying silent protects your social position. Sinai gives you a question: what does covenant faithfulness require?",a:["Whatever protects my popularity.","Whatever gets the most likes.","Truth and justice even when faithfulness costs something.","Nothing; morality is private."],c:2,ref:"Exodus 20:16; Leviticus 19:18",lens:"The commandments are not random restrictions. They train a people to live in right relationship—with God and neighbor."},
+ {type:"quiz",cat:"LITURGY",q:"Why does Catholic worship care so much about ritual, sacrifice, sacred space, and Scripture?",a:["Because God needs theater.","Because biblical worship forms a people through embodied signs and covenant remembrance.","Because Catholics cannot pray privately.","Because rituals replace faith."],c:1,ref:"Exodus 25–40; Hebrews 9; CCC 1066–1075",lens:"The Tabernacle shows that worship involves the whole person. Catholic liturgy continues the biblical conviction that God forms his people through word, action, space, symbol, and sacrifice."}
+]},
+{name:"World III — The Wilderness",icon:"⛺",desc:"Manna, holiness, Tabernacle, trust",tags:["Holiness","Worship","Trust"],missions:[
+ {type:"case",cat:"CASE STUDY • STRESS",q:"You are overwhelmed by school, sports, work, and family expectations. You start believing your worth depends on achievement. Israel in the wilderness gives you another question: what does it mean to receive rather than constantly prove yourself?",a:["I must earn my right to exist.","God's people learn dependence—receiving daily bread rather than controlling everything.","The answer is to become famous.","God only cares about perfect people."],c:1,ref:"Exodus 16; Deuteronomy 8",lens:"Manna is a lesson in dependence. Catholic spirituality repeatedly returns to the idea that grace is gift before achievement."},
+ {type:"quiz",cat:"HOLINESS",q:"When Leviticus says, “Be holy,” the biblical idea is closest to…",a:["Become socially impressive.","Be set apart for God and reflect his character in concrete life.","Avoid everyone who disagrees with you.","Never make a mistake."],c:1,ref:"Leviticus 19:2",lens:"Holiness is not simply being weird or flawless. It is belonging to God and allowing that belonging to reshape relationships, justice, worship, and everyday behavior."},
+ {type:"case",cat:"CASE STUDY • SUNDAY",q:"Your friends invite you somewhere during Sunday Mass. You are embarrassed to say you need to go to Mass. Which response best reflects covenant identity?",a:["Hide your faith so nobody thinks I'm strange.","Go to Mass because worship is a relationship with God, not merely a weekly obligation.","Tell everyone they're evil.","Skip Mass and promise to pray someday."],c:1,ref:"Exodus 20:8; CCC 2180–2188",lens:"The Sabbath pattern reaches Christian Sunday. The Catholic obligation to worship is not simply about checking a box; Sunday gathers the Church around Christ's Resurrection and Eucharistic worship."},
+ {type:"quiz",cat:"SCRIPTURE",q:"Which four questions form a useful Catholic framework for reading Scripture deeply?",a:["Who, what, where, when?","Literal, allegorical, moral, anagogical","Science, politics, economics, psychology","Old, middle, new, future"],c:1,ref:"CCC 109–119",lens:"The four senses help students move from what a passage means in itself toward how it points to Christ, forms our lives, and directs us toward our final destiny."}
+]},
+{name:"World IV — Kings & Kingdom",icon:"👑",desc:"Samuel, Saul, David, covenant, the Psalms",tags:["David","Kingdom","Messiah"],missions:[
+ {type:"quiz",cat:"DAVID",q:"Why does David matter so much for Christian theology?",a:["He is sinless.","God's covenant with David establishes a royal line that becomes central to messianic hope.","He destroys every enemy forever.","He writes every Psalm."],c:1,ref:"1 Samuel 16; 2 Samuel 7",lens:"Word on Fire's treatment of David highlights his place at a turning point in salvation history: David's kingship looks forward to a greater Davidic king, fulfilled in Christ."},
+ {type:"case",cat:"CASE STUDY • STATUS",q:"You finally become popular at school. People start copying what you wear and say. What is the danger David's story can help you see?",a:["Popularity automatically makes you wise.","Leadership is a gift that can become self-centered if the leader stops being accountable to God.","Kings never need correction.","The solution is to become unpopular on purpose."],c:1,ref:"2 Samuel 11–12; Psalm 51",lens:"David is not presented as a flawless hero. His greatness includes repentance. Psalm 51 gives students a model of returning honestly to God after serious sin."},
+ {type:"quiz",cat:"MESSIAH",q:"What does the title “Christ” mean?",a:["Teacher","Anointed One","Roman governor","Prophet from Egypt"],c:1,ref:"2 Samuel 7; Matthew 1:1; Luke 4:18",lens:"Christos means 'anointed.' Jesus is understood as the definitive priest, prophet, and king—the threefold office Bishop Barron frequently uses to explain both Christ and Christian vocation."},
+ {type:"case",cat:"CASE STUDY • LEADERSHIP",q:"Your teacher asks you to lead a project. You can either take all the credit or make sure everyone contributes and receives recognition. Which resembles biblical kingship at its best?",a:["Using everyone for my reputation.","Serving the good of the people entrusted to me.","Avoiding responsibility.","Making people fear me."],c:1,ref:"2 Samuel 5–7; Mark 10:42–45",lens:"Biblical kingship is transformed in Christ: true authority is service. Jesus' kingship reaches its climax not in domination but in self-giving."}
+]},
+{name:"World V — The Prophets",icon:"🔥",desc:"Idolatry, justice, exile, restoration, hope",tags:["Isaiah","Jeremiah","Exile"],missions:[
+ {type:"case",cat:"CASE STUDY • IDOLS",q:"Your phone is not literally a god, but you check it constantly, become anxious without it, and organize your identity around approval. A biblical prophet might ask:",a:["Is the phone expensive enough?","What has become the center of your life and trust?","Can I get a newer model?","Does God care only about ancient idols?"],c:1,ref:"Exodus 20:3–5; Isaiah 44",lens:"Idolatry is more than statues. It is treating a created good as though it can give the ultimate security, identity, or happiness that belongs to God."},
+ {type:"quiz",cat:"PROPHETS",q:"What is one central prophetic message?",a:["Forget the covenant.","Return to God, practice justice, reject idols, and trust God's promises.","Build a bigger army.","Stop caring about the poor."],c:1,ref:"Isaiah 1; Jeremiah 7; Amos 5",lens:"The prophets do not merely predict the future. They interpret Israel's present in light of covenant and call the people back to God."},
+ {type:"case",cat:"CASE STUDY • JUSTICE",q:"You see a student repeatedly excluded from a group because she is awkward. Nobody is physically hurting her, but everyone knows she is unwanted. Which prophetic theme applies?",a:["Justice is only about courts.","Love of neighbor includes concrete concern for the vulnerable and excluded.","It is not my problem if I'm not the bully.","Prophets cared only about ancient politics."],c:1,ref:"Amos 5; Micah 6:8; Leviticus 19:18",lens:"The prophets connect worship with justice. Biblical religion cannot be reduced to private feelings about God while ignoring how we treat people."},
+ {type:"quiz",cat:"NEW COVENANT",q:"Jeremiah speaks of a future covenant in which God's law will be…",a:["Destroyed","Written on the heart","Replaced by politics","Hidden from humanity"],c:1,ref:"Jeremiah 31:31–34",lens:"Christian readers see this promise fulfilled in Christ and the New Covenant. The law is not merely an external command; God transforms the human person from within."}
+]},
+{name:"World VI — The Road to Christ",icon:"✝️",desc:"Read the whole story toward Jesus",tags:["Jesus","Fulfillment","Eucharist"],missions:[
+ {type:"quiz",cat:"FULFILLMENT",q:"Why do Christians read the Old Testament as preparation for Christ?",a:["Because the Old Testament has no value by itself.","Because its covenants, patterns, promises, sacrifices, kings, prophets, and hopes culminate in the New Covenant established by Jesus.","Because Christians changed the Old Testament.","Because Jesus never read the Hebrew Scriptures."],c:1,ref:"Luke 24:25–27, 44–49; CCC 121–123",lens:"The Christian claim is not that the Old Testament is disposable. The Old Testament is indispensable for seeing who Jesus is and what his mission means."},
+ {type:"case",cat:"CASE STUDY • FORGIVENESS",q:"Someone seriously hurts you and later apologizes. You want justice, but you also know Christ commands forgiveness. What is the most Christian approach?",a:["Pretend the harm never happened.","Seek revenge.","Tell the truth about the wrong, pursue appropriate justice, and refuse to make hatred your identity.","Let people keep hurting you."],c:2,ref:"Genesis 50:15–21; Matthew 18:21–35",lens:"Biblical forgiveness is not denial. It releases vengeance while still allowing truth, justice, boundaries, and accountability."},
+ {type:"quiz",cat:"EUCHARIST",q:"Why is the Passover especially important for understanding the Catholic Mass?",a:["The Mass is simply a reenactment of an ancient dinner.","The Eucharist is the sacramental participation in Christ's once-for-all sacrifice and the New Covenant, with Passover providing crucial biblical background.","Catholics believe Moses celebrated Mass.","The Eucharist replaces Scripture."],c:1,ref:"Exodus 12; Luke 22:14–20; 1 Corinthians 5:7; CCC 1322–1419",lens:"The Mass is saturated with Passover and covenant imagery. The Catholic imagination sees the Eucharist as participation in Christ's Paschal Mystery, not merely a symbolic reminder."},
+ {type:"case",cat:"FINAL BOSS • IDENTITY",q:"You are asked: “Who are you?” Your first answers are your grades, appearance, relationship status, athletic ability, popularity, or future job. Scripture gives you a deeper answer. Which?",a:["I am whatever people online say I am.","I am a creature made in God's image, called into covenant relationship with God and neighbor, and invited into life in Christ.","I am only my achievements.","My identity is completely self-created."],c:1,ref:"Genesis 1:26–27; John 1:12–13; Galatians 2:20",lens:"The biblical story moves from creation to covenant to redemption. Christian identity is received as gift before it is constructed as achievement."}
+]}
+];
+
+let S=JSON.parse(localStorage.getItem("bq2")||'{"xp":0,"streak":0,"unlocked":1,"done":[],"best":{}}');
+let wi=0,mi=0,score=0,locked=false;
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem("bq2",JSON.stringify(S))}
+function rank(){return S.xp>=1000?"Scripture Scholar":S.xp>=650?"Covenant Keeper":S.xp>=350?"Disciple":S.xp>=150?"Pilgrim":"Seeker"}
+function stats(){$("xp").textContent=S.xp;$("streak").textContent=S.streak;$("rank").textContent=rank()}
+function go(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");stats();if(id==="worlds")renderWorlds()}
+function renderWorlds(){
+ const g=$("worldGrid");g.innerHTML="";
+ W.forEach((w,i)=>{
+  const ok=i<S.unlocked,done=S.done.includes(i),d=document.createElement("div");
+  d.className="card world"+(ok?"":" locked");
+  d.innerHTML=`<div class="icon">${ok?w.icon:"🔒"}</div><h3>${w.name} ${done?"✓":""}</h3><p>${w.desc}</p>${w.tags.map(t=>`<span class="tag">${t}</span>`).join("")}<div class="small" style="margin-top:10px">${ok?(done?"Completed":"Enter world"):"Locked"}</div>`;
+  if(ok)d.onclick=()=>start(i);g.appendChild(d);
+ });
+}
+function start(i){wi=i;mi=0;score=0;go("mission");renderMission()}
+function renderMission(){
+ const m=W[wi].missions[mi];locked=false;$("missionTag").textContent=W[wi].name;$("qnum").textContent=`Mission ${mi+1} / ${W[wi].missions.length}`;$("meter").style.width=(mi/W[wi].missions.length*100)+"%";$("worldScore").textContent=`Score ${score}`;
+ const c=$("missionCard");
+ if(m.type==="quiz") c.innerHTML=`<div class="small">${m.cat}</div><div class="q">${m.q}</div><div class="answers">${m.a.map((x,i)=>`<button class="ans" onclick="pick(${i},this)">${String.fromCharCode(65+i)}. ${x}</button>`).join("")}</div><div id="fb" class="feedback"></div>`;
+ else c.innerHTML=`<div class="small">${m.cat}</div><div class="case"><h3>${m.q}</h3><div class="choicegrid">${m.a.map((x,i)=>`<button onclick="pick(${i},this)">${x}</button>`).join("")}</div></div><div id="fb" class="feedback"></div>`;
+}
+function pick(i,b){
+ if(locked)return;locked=true;const m=W[wi].missions[mi],fb=$("fb"),all=document.querySelectorAll(".ans,.choicegrid button");
+ all.forEach(x=>x.disabled=true);
+ if(i===m.c){score++;S.xp+=40;S.streak++;if(b)b.classList.add("correct");fb.innerHTML=`<b>✓ Excellent. +40 XP</b>`}
+ else{S.streak=0;if(b)b.classList.add("wrong");if(m.type==="quiz")document.querySelectorAll(".ans")[m.c].classList.add("correct");fb.innerHTML=`<b>Not quite.</b> The strongest answer is: <b>${m.a[m.c]}</b>`}
+ fb.innerHTML+=`<div class="lens"><b>💡 Catholic Lens</b><br>${m.lens}</div><div class="small" style="margin-top:10px">📖 Read: ${m.ref}</div>`;
+ const nxt=document.createElement("button");nxt.className="gold";nxt.style.marginTop="14px";nxt.textContent=mi===W[wi].missions.length-1?"FINISH WORLD →":"NEXT MISSION →";nxt.onclick=()=>{mi++;mi<W[wi].missions.length?renderMission():finish()};fb.appendChild(nxt);fb.classList.add("show");save();stats()
+}
+function finish(){
+ const total=W[wi].missions.length,p=Math.round(score/total*100);S.done.includes(wi)||S.done.push(wi);if(wi+1<W.length)S.unlocked=Math.max(S.unlocked,wi+2);S.best[wi]=Math.max(S.best[wi]||0,score);save();
+ $("resultScore").textContent=p+"%";$("resultTitle").textContent=p===100?"🏆 PERFECT WORLD!":p>=70?"⭐ WORLD COMPLETE!":"📜 KEEP QUESTING!";
+ $("resultText").textContent=`You completed ${score} of ${total} missions in ${W[wi].name}.`;
+ $("badges").innerHTML=`<span class="badge">${W[wi].icon} ${W[wi].name}</span>${p===100?'<span class="badge">🔥 Perfect Run</span>':""}<span class="badge">+${score*40} XP</span>`;
+ go("result")
+}
+stats();renderWorlds();
+</script>
+</body>
+</html>
