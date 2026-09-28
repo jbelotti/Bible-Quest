@@ -1,99 +1,92 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Bible Quest — Genesis</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>THE COVENANT — Bible RPG Prototype</title>
 <style>
-:root{--ink:#17202a;--navy:#132b40;--gold:#d6ad42;--cream:#f8f3e8;--paper:#fffdf8;--muted:#6b7280;--green:#347a58;--purple:#7050a8;--red:#a33b3b}
-*{box-sizing:border-box}body{margin:0;background:#111d29;color:var(--ink);font-family:Georgia,serif}
-button,input{font:inherit}button{cursor:pointer}
-#game{max-width:1150px;margin:auto;min-height:100vh;background:var(--cream);box-shadow:0 0 50px #000}
-header{height:72px;background:linear-gradient(90deg,#0d2437,#243f55);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-family:system-ui,sans-serif}
-.brand{font-weight:900;font-size:20px;letter-spacing:.7px}.brand small{display:block;font-weight:500;font-size:10px;color:#b9c7d3;letter-spacing:1.2px}.stats{display:flex;gap:7px}.pill{border:1px solid #ffffff30;background:#ffffff12;border-radius:20px;padding:7px 10px;font-size:12px;font-weight:800}
-.screen{display:none}.screen.active{display:block}
-#title{min-height:calc(100vh - 72px);background:radial-gradient(circle at 50% 25%,#8da0a8,#334d5c 35%,#152a3b 80%);color:white;position:relative;overflow:hidden}
-.stars{position:absolute;inset:0;background-image:radial-gradient(#fff9 1px,transparent 1px);background-size:45px 45px;opacity:.45}
-.titlebox{position:relative;z-index:1;text-align:center;padding:16vh 20px 40px}.titlebox h1{font-size:clamp(42px,9vw,88px);margin:0;letter-spacing:2px;text-shadow:0 4px 25px #000}.titlebox .sub{font:700 15px system-ui,sans-serif;letter-spacing:5px;color:#ead28a;margin:8px}.titlebox p{max-width:700px;margin:24px auto;color:#e5e7eb;line-height:1.6;font-size:18px}
-.goldbtn{background:var(--gold);color:#241b08;border:0;border-radius:10px;padding:14px 23px;font:900 14px system-ui,sans-serif;box-shadow:0 5px 18px #0005}.ghost{background:#ffffff16;color:white;border:1px solid #ffffff44;border-radius:10px;padding:12px 17px;font:800 13px system-ui,sans-serif}
-#world{min-height:calc(100vh - 72px);background:linear-gradient(#71858a 0 26%,#9c835c 27% 42%,#5d6845 43% 100%);position:relative;overflow:hidden}
-.scene{height:calc(100vh - 72px);min-height:600px;position:relative;overflow:hidden}
-.sun{position:absolute;width:130px;height:130px;border-radius:50%;background:#e9c76a;right:9%;top:8%;filter:blur(1px);box-shadow:0 0 60px #efd98b88}
-.mountain{position:absolute;bottom:35%;width:0;height:0;border-left:260px solid transparent;border-right:260px solid transparent;border-bottom:300px solid #52616a;opacity:.8}.m1{left:-120px}.m2{right:-120px;transform:scale(.8)}.ground{position:absolute;bottom:0;height:38%;width:100%;background:linear-gradient(#5d7047,#465739);border-top:3px solid #79855d}
-path{}
-.player,.npc{position:absolute;bottom:29%;font-family:system-ui,sans-serif;z-index:3;text-align:center;transition:left .35s ease}.person{font-size:62px;filter:drop-shadow(0 7px 4px #0005)}.name{font-weight:900;font-size:12px;background:#fffdf8dd;border-radius:8px;padding:3px 6px;display:inline-block}.player{left:12%}.npc{cursor:pointer}.npc:hover .person{transform:translateY(-5px)}
-#adam{left:36%}#eve{left:52%}#cain{left:70%}#abel{left:82%}
-.sign{position:absolute;bottom:29%;z-index:2;font:800 12px system-ui,sans-serif;background:#3f2f20;color:#f8e7b3;padding:8px 10px;border-radius:8px}
-.s1{left:27%}.s2{left:62%}.s3{left:91%}
-.walkhint{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:#0008;color:#fff;padding:7px 12px;border-radius:20px;font:700 11px system-ui,sans-serif}
-.controls{position:absolute;bottom:20px;left:20px;z-index:8;display:flex;gap:8px}.ctrl{width:52px;height:45px;border-radius:10px;border:1px solid #fff5;background:#102a43dd;color:white;font-weight:900;font-family:system-ui}
-.panel{position:absolute;z-index:10;left:50%;top:50%;transform:translate(-50%,-50%);width:min(720px,92%);max-height:86vh;overflow:auto;background:var(--paper);border-radius:18px;box-shadow:0 18px 60px #0009;padding:24px;border:1px solid #e8d8b6}.panel h2{margin:0 0 5px;color:var(--navy);font-size:29px}.panel h3{color:var(--navy)}.label{font:900 11px system-ui,sans-serif;color:var(--purple);letter-spacing:1.5px}.panel p{line-height:1.6}.choice{display:grid;gap:9px;margin-top:15px}.choice button{padding:12px;text-align:left;border:2px solid #d9e0e5;background:white;border-radius:10px;color:var(--ink);font-weight:700}.choice button:hover{border-color:var(--gold);background:#fffaf0}.choice button.correct{border-color:var(--green);background:#edf8f0}.choice button.wrong{border-color:var(--red);background:#fff0f0}.close{float:right;background:#e9eef2;border:0;border-radius:9px;padding:8px 11px;font-weight:900}
-.quote{font-size:20px;line-height:1.5;border-left:4px solid var(--gold);padding:13px 17px;background:#fffaf0}.lens{margin-top:15px;padding:14px;background:#f7f4ec;border-left:4px solid var(--gold);line-height:1.55}.real{margin-top:15px;padding:14px;background:#faf7ff;border-left:4px solid var(--purple);line-height:1.55}
-#hud{position:absolute;top:15px;left:15px;z-index:5;background:#102a43dd;color:white;padding:10px 13px;border-radius:12px;font:700 12px system-ui}.progress{height:6px;width:160px;background:#ffffff33;border-radius:8px;margin-top:6px}.progress div{height:100%;background:var(--gold);width:0}
-.gallery{display:grid;grid-template-columns:1fr 1fr;gap:10px}.art{min-height:130px;border-radius:12px;padding:14px;background:linear-gradient(135deg,#3a4750,#9c815d);color:white;display:flex;align-items:end;font-weight:900;position:relative;overflow:hidden}.art:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 65% 25%,#f3d487aa,transparent 25%)}.art span{position:relative}
-.badge{display:inline-block;padding:6px 9px;border-radius:99px;background:#f4e4af;border:1px solid #dfc56e;font:800 11px system-ui;margin:3px}
-@media(max-width:650px){.person{font-size:48px}.npc{bottom:30%}.player{bottom:29%}.scene{min-height:520px}.panel{padding:18px}.gallery{grid-template-columns:1fr}.stats .pill:nth-child(2){display:none}}
+:root{--ink:#f7f1df;--gold:#e6b85c;--red:#9e3d35;--dark:#10131b;--panel:#171c28}
+*{box-sizing:border-box}body{margin:0;background:#080a0f;color:var(--ink);font-family:Georgia,serif;overflow:hidden}
+#game{height:100vh;display:flex;flex-direction:column}
+#hud{height:64px;background:#0d1119;border-bottom:1px solid #3d3b35;display:flex;align-items:center;gap:18px;padding:8px 18px;z-index:5}
+.logo{font-weight:bold;letter-spacing:2px;color:var(--gold)}.stat{font-family:system-ui;font-size:13px}.bar{width:120px;height:8px;background:#2b303a;border-radius:9px;overflow:hidden}.fill{height:100%;background:var(--gold);width:0}
+#world{position:relative;flex:1;overflow:hidden;background:linear-gradient(#6d8b9d 0%,#b7c6c2 45%,#596346 46%,#26321e 100%)}
+#sun{position:absolute;right:12%;top:12%;width:90px;height:90px;background:#f3d27c;border-radius:50%;box-shadow:0 0 80px #f3d27c88}
+.mountain{position:absolute;bottom:28%;width:0;height:0;border-left:230px solid transparent;border-right:230px solid transparent;border-bottom:310px solid #33433e}
+.m1{left:5%}.m2{left:30%;transform:scale(.8)}.m3{left:58%;transform:scale(1.15)}
+#ground{position:absolute;left:0;right:0;bottom:0;height:29%;background:linear-gradient(#465737,#26331d);border-top:3px solid #657044}
+#player{position:absolute;bottom:29%;left:9%;font-size:48px;filter:drop-shadow(0 7px 4px #0008);transition:left .08s}
+.npc{position:absolute;bottom:29%;font-size:45px;cursor:pointer;filter:drop-shadow(0 7px 4px #0008);transition:transform .15s}.npc:hover{transform:scale(1.12)}
+.sign{position:absolute;bottom:31%;font-size:32px;cursor:pointer;color:#ffe59a;text-shadow:0 0 15px #ffd65c}.sign small{display:block;font:11px system-ui;text-align:center}
+#toast{position:absolute;top:15px;left:50%;transform:translateX(-50%);background:#111925dd;border:1px solid #77683d;padding:10px 16px;border-radius:12px;font:14px system-ui;opacity:0;transition:.3s;pointer-events:none}
+#panel{position:absolute;right:20px;top:85px;width:min(410px,calc(100% - 40px));max-height:72vh;overflow:auto;background:#10151feF;border:1px solid #786b45;border-radius:16px;padding:20px;display:none;box-shadow:0 20px 70px #000b;z-index:10}
+h2{margin-top:0;color:var(--gold)}button{background:#d7ad58;border:0;padding:11px 14px;border-radius:9px;font-weight:bold;cursor:pointer;margin:5px 4px 0 0}button.alt{background:#303846;color:#fff}.choice{display:block;width:100%;text-align:left;margin:9px 0;background:#202838;color:#fff;border:1px solid #4e596b}.choice:hover{border-color:var(--gold)}
+#controls{position:absolute;left:18px;bottom:18px;background:#111722cc;border:1px solid #4b4d49;border-radius:12px;padding:9px 12px;font:12px system-ui;z-index:4}
+#banner{position:absolute;inset:0;background:radial-gradient(circle,#243244aa,#080b11f5);display:flex;align-items:center;justify-content:center;z-index:20}
+#card{max-width:700px;text-align:center;padding:35px}.eyebrow{color:var(--gold);letter-spacing:4px;font:12px system-ui;font-weight:bold}.title{font-size:clamp(42px,8vw,82px);margin:10px 0}.sub{font:17px system-ui;line-height:1.6;color:#d9dce2}
+.hidden{display:none!important}
+@media(max-width:700px){#hud{gap:8px;padding:7px 10px}.logo{font-size:12px}.bar{width:70px}#controls{font-size:11px}.mountain{border-left-width:150px;border-right-width:150px;border-bottom-width:210px}}
 </style>
 </head>
 <body>
 <div id="game">
-<header><div class="brand">📜 BIBLE QUEST <small>THE STORY OF SALVATION</small></div><div class="stats"><span class="pill">⭐ <b id="xp">0</b> XP</span><span class="pill">🔥 <b id="streak">0</b></span><span class="pill">🏅 <b id="rank">Pilgrim</b></span></div></header>
-
-<section id="title" class="screen active"><div class="stars"></div><div class="titlebox">
-<div style="font-size:58px">🌌</div><div class="sub">GENESIS — WORLD I</div><h1>BIBLE QUEST</h1>
-<p><i>The story begins in darkness.</i><br>Walk into the biblical world. Meet its people. Discover their strengths and failures. Follow the clues. And watch the story begin to point toward Someone who has not yet appeared.</p>
-<button class="goldbtn" onclick="begin()">ENTER GENESIS</button>
-</div></section>
-
-<section id="world" class="screen">
-<div class="scene" id="scene">
-<div class="sun"></div><div class="mountain m1"></div><div class="mountain m2"></div><div class="ground"></div>
-<div id="hud">GENESIS 1–4<br><span id="quest">Explore Eden and meet the first family.</span><div class="progress"><div id="prog"></div></div></div>
-<div class="player" id="player"><div class="person">🧑🏻‍🦱</div><div class="name">YOU</div></div>
-<div class="npc" id="adam" onclick="meet('adam')"><div class="person">🧔🏻</div><div class="name">Adam</div></div>
-<div class="npc" id="eve" onclick="meet('eve')"><div class="person">👩🏻</div><div class="name">Eve</div></div>
-<div class="npc" id="cain" onclick="meet('cain')"><div class="person">🧑🏽</div><div class="name">Cain</div></div>
-<div class="npc" id="abel" onclick="meet('abel')"><div class="person">👨🏻‍🌾</div><div class="name">Abel</div></div>
-<div class="sign s1" onclick="artifact('creation')">✦ Creation</div>
-<div class="sign s2" onclick="artifact('tree')">✦ The Garden</div>
-<div class="sign s3" onclick="artifact('altar')">✦ Altar</div>
-<div class="controls"><button class="ctrl" onclick="move(-1)">←</button><button class="ctrl" onclick="move(1)">→</button><button class="ctrl" onclick="showMap()">☰</button></div>
-<div class="walkhint">Explore • Tap characters • Find the golden signs</div>
-</div>
-</section>
-
-<div id="modal" style="display:none"></div>
+<header id="hud">
+<div class="logo">THE COVENANT</div>
+<div class="stat">FAITH <span id="xp">0</span></div>
+<div class="bar"><div id="fill" class="fill"></div></div>
+<div class="stat">DISCOVERIES <span id="disc">0</span></div>
+<div class="stat">ACT I: EDEN</div>
+</header>
+<main id="world">
+<div id="sun"></div><div class="mountain m1"></div><div class="mountain m2"></div><div class="mountain m3"></div><div id="ground"></div>
+<div id="player">🧑🏻</div>
+<div class="npc" style="left:35%" onclick="talk('adam')">🧔🏻<small>Adam</small></div>
+<div class="npc" style="left:52%" onclick="talk('eve')">👩🏻<small>Eve</small></div>
+<div class="npc" style="left:70%" onclick="talk('cain')">🧑🏽<small>Cain</small></div>
+<div class="npc" style="left:82%" onclick="talk('abel')">🧑🏼‍🌾<small>Abel</small></div>
+<div class="sign" style="left:20%" onclick="discover('imago')">✦<small>DISCOVER</small></div>
+<div class="sign" style="left:61%" onclick="discover('fall')">✦<small>DISCOVER</small></div>
+<div class="sign" style="left:91%" onclick="discover('altar')">✦<small>DISCOVER</small></div>
+<div id="toast"></div>
+<div id="panel"></div>
+<div id="controls">← → explore &nbsp; • &nbsp; click characters &nbsp; • &nbsp; discover glowing signs</div>
+<div id="banner"><div id="card">
+<div class="eyebrow">A STORY YOU HAVE NEVER PLAYED BEFORE</div>
+<div class="title">THE COVENANT</div>
+<div class="sub">Enter the biblical world. Meet the people. Make choices. Discover the patterns. Follow the trail all the way to Christ.</div>
+<button onclick="start()">ENTER THE STORY</button>
+</div></div>
+</main>
 </div>
 <script>
-const P={xp:0,streak:0,discoveries:0,flags:{}};let x=12,progress=0;
+let x=9, xp=0, discoveries=0, met={};
 const $=id=>document.getElementById(id);
-function stats(){ $('xp').textContent=P.xp;$('streak').textContent=P.streak;$('rank').textContent=P.xp>=500?'Covenant Keeper':P.xp>=250?'Disciple':P.xp>=100?'Pilgrim':'Seeker';$('prog').style.width=Math.min(progress,100)+'%'}
-function begin(){$('title').classList.remove('active');$('world').classList.add('active');stats();openPanel(`<div class="label">THE FIRST STEP</div><h2>In the beginning…</h2><p class="quote">“In the beginning, God created the heavens and the earth.”<br><span style="font-size:13px">Genesis 1:1</span></p><p>You are entering a world where the most important questions are not yet answered: <b>Who am I? What is God like? What is freedom? Why is there suffering? Can humanity be restored?</b></p><div class="lens"><b>📖 Catholic Lens</b><br>The Bible begins not with a command to prove God's existence, but with a vision of reality: creation is gift. Everything that exists receives its being from God.</div><button class="goldbtn" onclick="closePanel()">BEGIN WALKING</button>`)}
-function move(d){x=Math.max(5,Math.min(91,x+d*7));$('player').style.left=x+'%';progress=Math.min(100,progress+2);stats()}
-function meet(who){
-if(P.flags[who]){openPanel(replay(who));return}
-P.flags[who]=true;P.discoveries++;progress=Math.min(100,progress+12);stats();
-let html='';
-if(who==='adam')html=`<div class="label">CHARACTER • ADAM</div><h2>Adam: Gift, Passivity & Responsibility</h2><p>Adam is given a beautiful vocation: receive creation, cultivate it, and live in trust with God. Yet in the Fall narrative, he becomes passive and later shifts blame.</p><p><b>Relationship:</b> Adam ↔ Eve. Their relationship is meant for mutual communion, but sin introduces shame, fear, accusation, and rupture.</p><div class="lens"><b>✝️ Typology: Adam → Christ</b><br>Christian tradition sees Jesus as the <i>New Adam</i>. Where Adam's disobedience brings death, Christ's obedience brings life. This pattern will become more important as your journey continues.</div><div class="real"><b>REAL LIFE • Responsibility</b><br>You made a mistake in a group project. You can blame a teammate, stay silent, or own your part. What does responsibility look like?</div>`;
-if(who==='eve')html=`<div class="label">CHARACTER • EVE</div><h2>Eve: Desire, Deception & Hope</h2><p>Eve is not a disposable villain. She is a human person whose desire becomes entangled with a false promise: that grasping for something will make her “like God.”</p><p><b>Relationship:</b> Eve ↔ Adam. The Fall damages their trust and introduces shame.</p><div class="lens"><b>✝️ Typology: Eve → Mary</b><br>Catholic tradition sees a New Eve pattern: Mary freely responds to God where Eve's story begins with disobedience. The comparison is about salvation history, not claiming that Eve and Mary are the same person.</div><div class="real"><b>REAL LIFE • Image & Identity</b><br>A social-media trend tells you that you will finally be happy if you look, dress, or live a certain way. What false promise might you be tempted to believe?</div>`;
-if(who==='cain')html=`<div class="label">CHARACTER • CAIN</div><h2>Cain: Envy, Anger & Choice</h2><p>Cain's story turns quickly from wounded pride to violence. God warns him that sin is “crouching” at the door—but Cain still has responsibility for what he does.</p><p><b>Relationship:</b> Cain ↔ Abel. Sibling rivalry becomes lethal.</p><div class="lens"><b>📖 Catholic Lens</b><br>Sin is not merely breaking an arbitrary rule. It disorders our loves and relationships. Cain's envy turns his brother into a rival rather than a gift.</div><div class="real"><b>REAL LIFE • Comparison</b><br>A friend gets the part, grade, position, or relationship you wanted. Nobody sees what you do next. What happens inside you?</div>`;
-if(who==='abel')html=`<div class="label">CHARACTER • ABEL</div><h2>Abel: The Brother Who Becomes a Sign</h2><p>Abel is remembered through a story of innocence, sacrifice, and unjust violence. His blood cries from the ground after Cain kills him.</p><div class="lens"><b>✝️ Typology</b><br>The New Testament later speaks of Jesus' blood as speaking a better word than Abel's. The contrast is striking: Abel's blood cries for justice; Christ's blood becomes the sign of mercy and reconciliation.</div><div class="real"><b>REAL LIFE • Exclusion</b><br>You notice someone being quietly pushed out of your friend group. No one says anything openly cruel. What would love require?</div>`;
-openPanel(html+`<br><button class="goldbtn" onclick="closePanel()">CONTINUE JOURNEY</button>`)}
-function replay(w){return `<div class="label">DISCOVERY</div><h2>You remember ${w}.</h2><p>Return to the story anytime. Characters are not merely answers to memorize; their relationships reveal the consequences of choices.</p><button class="goldbtn" onclick="closePanel()">CLOSE</button>`}
-function artifact(kind){
-progress=Math.min(100,progress+15);P.xp+=20;P.discoveries++;stats();
-let h='';
-if(kind==='creation')h=`<div class="label">DISCOVERY • CREATION</div><h2>Made in the Image</h2><p class="quote">“God created mankind in his image.” — Genesis 1:27</p><p>This becomes a foundation for Christian human dignity: the person in front of you is not an obstacle, statistic, follower count, or tool.</p><div class="real"><b>CASE STUDY</b><br>A student who is unpopular walks into class. How might <i>imago Dei</i> change the way you treat him?</div>`;
-if(kind==='tree')h=`<div class="label">DISCOVERY • THE GARDEN</div><h2>The Choice</h2><p>Genesis portrays sin as a distortion of trust: “Did God really say…?” The temptation is not merely about fruit. It is about who gets to define the good.</p><div class="lens"><b>Word on Fire-style lens</b><br>The biblical drama repeatedly returns to the question of whether human beings will receive the good as gift or attempt to seize it on their own terms.</div><button class="purple" onclick="caseStudy()">MAKE A CHOICE</button>`;
-if(kind==='altar')h=`<div class="label">DISCOVERY • SACRIFICE</div><h2>Why Sacrifice?</h2><p>As the story progresses, sacrifice becomes a recurring biblical language of offering, covenant, communion, and reconciliation. Keep this symbol in your memory.</p><div class="lens"><b>⚠️ FORESHADOWING</b><br>You have not reached Passover, the Temple, or the Cross. But the story is beginning to teach you a vocabulary you will need later.</div>`;
-openPanel(h+`<br><button class="goldbtn" onclick="closePanel()">RETURN</button>`)
+function start(){ $('banner').classList.add('hidden'); toast("The story begins with a gift."); }
+function move(d){ if($('banner').classList.contains('hidden')){x=Math.max(3,Math.min(94,x+d*2));$('player').style.left=x+'%';}}
+addEventListener('keydown',e=>{if(e.key==='ArrowLeft')move(-1);if(e.key==='ArrowRight')move(1);if(e.key==='Escape')closePanel()});
+function toast(t){let e=$('toast');e.textContent=t;e.style.opacity=1;clearTimeout(window.tt);window.tt=setTimeout(()=>e.style.opacity=0,2200)}
+function gain(n){xp+=n;discoveries+=n>0?1:0;$('xp').textContent=xp;$('disc').textContent=discoveries;$('fill').style.width=Math.min(100,xp)+'%'}
+function discover(k){
+const data={
+imago:["THE IMAGE","Genesis begins with a claim about human dignity: the human person bears the image of God. That changes how you see every person you meet.","Look for the image of God in someone difficult to love.","The New Adam will restore what Adam damaged."],
+fall:["THE WHISPER","The first temptation is not merely about fruit. It is about trust: “Did God really say…?” Freedom becomes a battlefield when desire stops listening to truth.","What voices compete for your trust?","The story will keep asking: who can obey God perfectly?"],
+altar:["THE ALTAR","Sacrifice becomes a recurring biblical language. Here it is only a beginning. Keep watching for lambs, blood, wood, bread, priests, covenant, and deliverance.","What does sacrifice communicate?","One day the symbols will converge."]
+]};
+let d=data[k];gain(10);panel("<h2>"+d[0]+"</h2><p>"+d[1]+"</p><hr><p><b>LIVE QUESTION</b><br>"+d[2]+"</p><p style='color:#e6b85c'><b>TYPOLOGY</b><br>"+d[3]+"</p><button onclick='closePanel()'>Continue</button>");
 }
-function caseStudy(){openPanel(`<div class="label">REAL-LIFE CHALLENGE</div><h2>The “Everyone Does It” Problem</h2><p>Your friends convince you to do something you know isn't right. One says, “God wouldn't care about something this small.” Another says, “If everyone does it, it can't really be wrong.”</p><div class="choice"><button onclick="decision(0,this)">A. Go along because I don't want to be the odd one out.</button><button onclick="decision(1,this)">B. Pause and ask whether the choice is actually good, even if everyone approves.</button><button onclick="decision(2,this)">C. Do it, but hide it better.</button></div><div id="decision"></div>`)}
-function decision(i,b){document.querySelectorAll('.choice button').forEach(x=>x.disabled=true);if(i===1){b.classList.add('correct');P.xp+=35;P.streak++;$('decision').innerHTML='<div class="lens"><b>Good reasoning. +35 XP</b><br>Genesis is teaching that freedom is connected to truth and the good, not merely social approval.</div>'}else{b.classList.add('wrong');P.streak=0;$('decision').innerHTML='<div class="lens"><b>Think deeper.</b><br>The problem is not simply being caught. The biblical question is whether the choice is worthy of the person you are becoming.</div>'}stats();setTimeout(closePanel,900)}
-function showMap(){openPanel(`<div class="label">WORLD MAP</div><h2>Genesis: The First Family</h2><p><span class="badge">✓ Creation</span><span class="badge">✓ Garden</span><span class="badge">Cain & Abel</span><span class="badge">Noah 🔒</span><span class="badge">Abraham 🔒</span></p><p>Explore the current world. Future versions will expand this map into the full Old Testament, then into the New Testament.</p><div class="lens"><b>THE STORY IS MOVING</b><br>Creation → Fall → Promise → Covenant → Exodus → Kingdom → Prophets → Messiah.</div><button class="goldbtn" onclick="closePanel()">RETURN</button>`)}
-function openPanel(html){let m=$('modal');m.style.display='block';m.innerHTML=`<div class="panel"><button class="close" onclick="closePanel()">×</button>${html}</div>`}
-function closePanel(){$('modal').style.display='none'}
-stats();
+function talk(k){
+let data={
+adam:{name:"ADAM",text:"I was given a garden, a vocation, and a companion. My failure was not that I lacked gifts. It was that I failed to receive them rightly—and failed to take responsibility when it mattered.",rel:"ADAM ↔ EVE: intimacy, trust, responsibility",flaw:"Passivity when courage was required.",typ:"The New Testament calls Christ the New Adam: where Adam's disobedience wounds humanity, Christ's obedience begins its restoration.",caseq:"You see a friend blamed for something you both did. Do you stay silent because speaking up costs you?"},
+eve:{name:"EVE",text:"The serpent made God's command sound like a limitation. The temptation was not simply ‘wanting something.’ It was believing that God's gift could not be trusted.",rel:"EVE ↔ ADAM: desire, influence, shared responsibility",flaw:"Desire becomes detached from trust.",typ:"Christian tradition sees Eve and Mary as a contrast: Eve's story begins a fall; Mary's fiat receives God's plan.",caseq:"An influencer tells you that freedom means becoming whoever you want, regardless of truth. What is missing from that idea?"},
+cain:{name:"CAIN",text:"I brought an offering. Abel brought one too. And suddenly his goodness felt like an accusation against me. Envy turned my brother into a rival.",rel:"CAIN ↔ ABEL: comparison, envy, brotherhood",flaw:"Unmastered anger becomes violence.",typ:"Abel's innocent blood cries from the ground. Christian interpretation later sees Christ's blood as speaking a greater word of mercy.",caseq:"Someone receives praise you wanted. What would it mean to master your reaction instead of letting envy choose for you?"},
+abel:{name:"ABEL",text:"The text gives me few words. That is part of the point: the innocent can become a sign simply through what happens to them.",rel:"ABEL ↔ CAIN: innocence confronted by resentment",flaw:"No moral flaw is presented; his story exposes Cain's.",typ:"Abel's blood is an early biblical pattern of innocent blood crying out. Hebrews later contrasts it with Jesus' blood, which speaks mercy.",caseq:"A classmate is excluded because they are unpopular. Do you enter the situation when it would be easier not to?"}
+};
+let d=data[k];met[k]=1;gain(5);
+panel("<h2>"+d.name+"</h2><p>"+d.text+"</p><p><b>RELATIONSHIP</b><br>"+d.rel+"</p><p><b>CHARACTER FAULT / TENSION</b><br>"+d.flaw+"</p><p style='color:#e6b85c'><b>THE TRAIL TO CHRIST</b><br>"+d.typ+"</p><hr><p><b>REAL WORLD</b><br>"+d.caseq+"</p><button onclick='decision(\""+k+"\",0)'>Reflect</button><button class='alt' onclick='closePanel()'>Leave</button>");
+}
+function decision(k,v){gain(10);panel("<h2>CHOICE RECORDED</h2><p>Your character is being shaped by what you choose to notice, love, and do.</p><p style='color:#e6b85c'><b>COMING SOON:</b> choices will alter relationships, unlock dialogue, reveal hidden Scripture, and change which paths through the story become available.</p><button onclick='closePanel()'>Continue exploring</button>");}
+function panel(html){$('panel').innerHTML=html;$('panel').style.display='block'}
+function closePanel(){$('panel').style.display='none'}
 </script>
 </body>
 </html>
